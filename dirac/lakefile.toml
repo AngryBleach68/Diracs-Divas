@@ -1,0 +1,10 @@
+name = "dirac"
+version = "0.1.0"
+defaultTargets = ["dirac"]
+
+[[lean_lib]]
+name = "Dirac"
+
+[[lean_exe]]
+name = "dirac"
+root = "Main"
