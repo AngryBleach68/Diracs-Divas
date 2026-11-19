@@ -4,9 +4,11 @@ import Mathlib.Combinatorics.Pigeonhole
 import Mathlib.Tactic
 
 
-theorem Dirac (G : SimpleGraph V) (FinType V) (hvgeq3 : V.card ≥ 3) (hdeg : ∀ v : V, G.degree v ≥ V.card / 2) : G.isHamiltonian := by
+theorem Dirac (G : SimpleGraph V) (FinType V) (hvgeq3 : V.card ≥ 3)
+(hdeg : ∀ v : V, G.degree v ≥ V.card / 2) : G.isHamiltonian := by
 
   --Let P be a maxium path in G, v1 ... vk
+  G.Path u v
   -- have k <= n
   -- All neighbours of V1 and vk are in teh path , contra
   --
