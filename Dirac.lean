@@ -3,8 +3,11 @@ import Mathlib.Combinatorics.SimpleGraph.Basic
 import Mathlib.Combinatorics.Pigeonhole
 import Mathlib.Combinatorics.SimpleGraph.Hamiltonian
 
-def MaximalPath {V : Type} [Fintype V] [DecidableEq V] {a b : V} (G : SimpleGraph V) : Prop :=
-  ∃ P : G.Path a b, ∀ u : G.Path a b, P.val.length ≥ u.val.length
+def MaximalPathBetween {V : Type} [Fintype V] [DecidableEq V] (a b : V) (G : SimpleGraph V) (P : G.Path a b) : Prop :=
+    ∀ Q : G.Path a b, P.val.length ≥ Q.val.length
+
+def MaximalPath {V : Type} [Fintype V] [DecidableEq V] {a b : V} {G : SimpleGraph V} (P : G.Path a b): Prop :=
+    ∀ u v : V, ∀ Q : G.Path u v, P.val.length ≥ Q.val.length
 
 theorem Dirac {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V) (hvgeq3 : Fintype.card V ≥ 3)
 [∀ v : V, Fintype (G.neighborSet v)] (hdeg : ∀ v : V, SimpleGraph.degree G v ≥ Fintype.card V / 2)
