@@ -6,13 +6,22 @@ import Mathlib.Combinatorics.SimpleGraph.Hamiltonian
 def MaximalPathBetween {V : Type} [Fintype V] [DecidableEq V] (a b : V) (G : SimpleGraph V) (P : G.Path a b) : Prop :=
     ∀ Q : G.Path a b, P.val.length ≥ Q.val.length
 
-def MaximalPath {V : Type} [Fintype V] [DecidableEq V] {a b : V} {G : SimpleGraph V} (P : G.Path a b): Prop :=
+def IsMaximalPath {V : Type} [Fintype V] [DecidableEq V] {a b : V} {G : SimpleGraph V} (P : G.Path a b): Prop :=
     ∀ u v : V, ∀ Q : G.Path u v, P.val.length ≥ Q.val.length
 
+lemma PathLengthIsAtMostCardV {V : Type} [Fintype V] {a b : V} {G : SimpleGraph V}:
+    ∀ P : G.Path a b, P.val.length ≤ Fintype.card V := by
+    intro P
+    sorry
+
+lemma FiniteGraphHasMaximalPath {V : Type} [Fintype V] [DecidableEq V] {G : SimpleGraph V} :
+    ∃ a b : V, ∃ P : G.Path a b, IsMaximalPath P := by
+    sorry
+
 theorem Dirac {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V) (hvgeq3 : Fintype.card V ≥ 3)
-[∀ v : V, Fintype (G.neighborSet v)] (hdeg : ∀ v : V, SimpleGraph.degree G v ≥ Fintype.card V / 2)
+[∀ v : V, Fintype (G.neighborSet v)] (hdeg : ∀ v : V, SimpleGraph.degree G v ≥ Fintype.card V / 2) {a b : V}
 : SimpleGraph.IsHamiltonian G := by
-  sorry
+    sorry
   --Let P be a maxium path in G, v1 ... vk
   -- G.Path u v
   -- have k <= n
