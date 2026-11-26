@@ -9,10 +9,22 @@ def MaximalPathBetween {V : Type} [Fintype V] [DecidableEq V] (a b : V) (G : Sim
 def MaximalPath {V : Type} [Fintype V] [DecidableEq V] {a b : V} {G : SimpleGraph V} (P : G.Path a b): Prop :=
     ∀ u v : V, ∀ Q : G.Path u v, P.val.length ≥ Q.val.length
 
-theorem Dirac {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V) (hvgeq3 : Fintype.card V ≥ 3)
+
+variable {V : Type}
+variable (Red Green : Set V)
+
+theorem Dirac {Red Green : Set V} [Fintype V] [DecidableEq V] (G : SimpleGraph V) (hvgeq3 : Fintype.card V ≥ 3)
 [∀ v : V, Fintype (G.neighborSet v)] (hdeg : ∀ v : V, SimpleGraph.degree G v ≥ Fintype.card V / 2)
 : SimpleGraph.IsHamiltonian G := by
-  sorry
+
+    -- might need to 'unfold' these to see the actual property they represent
+    let Red : Set V := sorry
+    let Green : Set V := sorry
+    have existsredandgreenvi : ∃ v : V, v ∈ Red ∧ v ∈ Green := by
+        sorry
+
+    sorry
+
   --Let P be a maxium path in G, v1 ... vk
   -- G.Path u v
   -- have k <= n
@@ -29,3 +41,8 @@ theorem Dirac {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V) (hvgeq3
   -- use Finset.exists_mem_exisits_mem_inf'_card_lt
   --
   --
+  -- Proving there is a simple cycle:
+  -- Travel from v1 to vi along P
+  -- From vi to vk by the edge guaranteed by green circle
+  -- Backwards along P from vk to v_{i+1}
+  -- Directly from v_{i+1} to 1 by red circle
