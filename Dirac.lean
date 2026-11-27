@@ -18,17 +18,18 @@ theorem exists_max_path {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph 
     : ∃ P : Sigma (SomePath G), MaximumPath P := by
     sorry
 
--- TODO: prove that for any graph with a path, the length of this path is at most |V| - 1
--- (length of a walk is defined as no. of edges along it)
+-- TODO: prove that for any graph with a path, the set of vertices of the path
+-- has cardinality at most |V|
 theorem pathLengthLeV {V : Type} [Fintype V] [DecidableEq V] {G : SimpleGraph V}
     (P : Sigma (SomePath G))
-    : P.snd.val.length ≤ Fintype.card V - 1 := by
+    : P.snd.val.support.length ≤ Fintype.card V := by
         sorry
 
--- theorem pigeonhole_variant [Fintype A] [Fintype B] [DecidableEq A] [DecidableEq B] (f : A → Finset B)
--- (h₀ : Fintype.card A = 2) (h₁ : ∀ i : A, Fintype.card (f i) ≥ Fintype.card B / 2) :
---     ∃ i : Set.image f, ∀ j : B, i ∈ (f j) := by
---     sorry
+-- TODO: prove this 'set-valued function' variation of the pigeonhole principle.
+theorem pigeonhole_variant [Fintype A] [Fintype B] [DecidableEq A] [DecidableEq B] (f : A → Finset B)
+(h₀ : Fintype.card A = 2) (h : ∀ i : A, Fintype.card (f i) ≥ Fintype.card B / 2) :
+    ∃ i : B, ∀ j : A, i ∈ (f j) := by
+    sorry
 
 -- variable {V : Type}
 -- variable (Red Green : Set V)
@@ -47,7 +48,7 @@ theorem Dirac {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V)
     -- rcases recursively unfolds 'there exists' statement in hypothesis to give a maximum path P.
     rcases hExistsMaxPath with ⟨P, hPIsMaxPath⟩
 
-    -- let P_vlist := P.2.2.val.support
+    let P_vert_list := P.snd.val.support
 
     sorry
     -- might need to 'unfold' these to see the actual property they represent
