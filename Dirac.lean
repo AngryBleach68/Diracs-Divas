@@ -16,7 +16,7 @@ def MaximumPath {V : Type} [Fintype V] [DecidableEq V] {G : SimpleGraph V} (P : 
 
 -- TODO: prove that if G is a graph with edges then G has a maximum path.
 theorem exists_max_path {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V)
-    (hGnonempty : G.edgeSet.Nonempty)
+    (hGnotempty : G.edgeSet.Nonempty)
     : ∃ P : Sigma (SomePath G), MaximumPath P := by
     sorry
 
@@ -45,7 +45,13 @@ theorem Dirac {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V)
     -- TODO: show that G has edges.
     have hExistsMaxPath : ∃ P : Sigma (SomePath G), MaximumPath P := by
         have hGnonempty : G.edgeSet.Nonempty := by
+            -- 4 * |E| >= |V|^2 by SimpleGraph.sum_degrees_eq_twice_card_edges
+            -- |V|^2 >= 6 by hvgeq3
+            -- hence |E| >= 3/2
+            -- hence |E| >= 1 as natural number
+            -- hence edgeSet is non empty
             sorry
+
         exact exists_max_path G hGnonempty
 
     -- rcases recursively unfolds 'there exists' statement in hypothesis to give a maximum path P
