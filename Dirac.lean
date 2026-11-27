@@ -4,12 +4,14 @@ import Mathlib.Combinatorics.Pigeonhole
 import Mathlib.Combinatorics.SimpleGraph.Hamiltonian
 
 -- Notion of a path with arbitrary endpoints. Called using Sigma (SomePath G) - 'Sigma' means we
--- don't care about what the endpoints are. In order to access 'Path' attribute of P, must write P.snd
--- P.fst will give pair (u, v) of endpoints.
-def SomePath {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V) (endpoints : V × V) : Type :=
+-- don't care about what the endpoints are. In order to access 'Path' attribute of P,
+-- must write P.snd && P.fst will give pair (u, v) of endpoints.
+def SomePath {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V) (endpoints : V × V)
+: Type :=
     G.Path endpoints.fst endpoints.snd
 
-def MaximumPath {V : Type} [Fintype V] [DecidableEq V] {G : SimpleGraph V} (P : Sigma (SomePath G)) : Prop :=
+def MaximumPath {V : Type} [Fintype V] [DecidableEq V] {G : SimpleGraph V} (P : Sigma (SomePath G))
+: Prop :=
     ∀ Q : Sigma (SomePath G), P.snd.val.length ≥ Q.snd.val.length
 
 -- TODO: prove that if G is a graph with edges then G has a maximum path.
@@ -26,7 +28,8 @@ theorem pathLengthLeV {V : Type} [Fintype V] [DecidableEq V] {G : SimpleGraph V}
         sorry
 
 -- TODO: prove this 'set-valued function' variation of the pigeonhole principle.
-theorem pigeonhole_variant [Fintype A] [Fintype B] [DecidableEq A] [DecidableEq B] (f : A → Finset B)
+-- Possible direction: Finset.exists_mem_exists_mem_inf'_card_lt (can't figure out how to use it...)
+theorem pigeonhole_variant [Fintype A] [Fintype B] (f : A → Finset B)
 (h₀ : Fintype.card A = 2) (h : ∀ i : A, Fintype.card (f i) ≥ Fintype.card B / 2) :
     ∃ i : B, ∀ j : A, i ∈ (f j) := by
     sorry
@@ -45,9 +48,10 @@ theorem Dirac {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V)
             sorry
         exact exists_max_path G hGnonempty
 
-    -- rcases recursively unfolds 'there exists' statement in hypothesis to give a maximum path P.
+    -- rcases recursively unfolds 'there exists' statement in hypothesis to give a maximum path P
     rcases hExistsMaxPath with ⟨P, hPIsMaxPath⟩
 
+    -- vertices in P
     let P_vert_list := P.snd.val.support
 
     sorry
