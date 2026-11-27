@@ -3,47 +3,48 @@ import Mathlib.Combinatorics.SimpleGraph.Basic
 import Mathlib.Combinatorics.Pigeonhole
 import Mathlib.Combinatorics.SimpleGraph.Hamiltonian
 
-def Path' {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V) :=
-    Σ (u v : V), G.Path u v
+def SomePath {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V) (endpoints : V × V) : Type :=
+    G.Path endpoints.fst endpoints.snd
 
-def path'_length {V : Type} [Fintype V] [DecidableEq V] {G : SimpleGraph V} (P : Path' G)
-    := P.2.2.val.length
+def Path' {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V) : Type :=
+    Σ u v : V, G.Path u v
 
--- def MaximumPathBetween {V : Type} [Fintype V] [DecidableEq V] (a b : V) (G : SimpleGraph V) (P : G.Path a b) : Prop :=
---     ∀ Q : G.Path a b, P.val.length ≥ Q.val.length
+def MaximumPath {V : Type} [Fintype V] [DecidableEq V] {G : SimpleGraph V} (P : Sigma (SomePath G)) : Prop :=
+    ∀ Q : Sigma (SomePath G), P.snd.val.length ≥ Q.snd.val.length
 
-def MaximumPath {V : Type} [Fintype V] [DecidableEq V] {G : SimpleGraph V} (P : Path' G) : Prop :=
-    ∀ Q : Path' G, path'_length P ≥ path'_length Q
-
-theorem existsMaximumPath {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V)
+theorem exists_max_path {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V)
     (hvgeq2 : Fintype.card V ≥ 2) (hGnonempty : G.edgeSet.Nonempty)
-    : ∃ P : Path' G, MaximumPath P := by
-
+    : ∃ P : Sigma (SomePath G), MaximumPath P := by
     sorry
 
-theorem PathLengthLeV {V : Type} [Fintype V] [DecidableEq V] {G : SimpleGraph V}
-    (P : Path' G)
-    : path'_length P ≤ Fintype.card V := by
+theorem pathLengthLeV {V : Type} [Fintype V] [DecidableEq V] {G : SimpleGraph V}
+    (P : Sigma (SomePath G))
+    : P.snd.val.length ≤ Fintype.card V := by
         sorry
+
+-- theorem pigeonhole_variant [Fintype A] [Fintype B] [DecidableEq A] [DecidableEq B] (f : A → Finset B)
+-- (h₀ : Fintype.card A = 2) (h₁ : ∀ i : A, Fintype.card (f i) ≥ Fintype.card B / 2) :
+--     ∃ i : Set.image f, ∀ j : B, i ∈ (f j) := by
+--     sorry
 
 -- variable {V : Type}
 -- variable (Red Green : Set V)
 
-theorem Dirac {Red Green : Set V} [Fintype V] [DecidableEq V] (G : SimpleGraph V)
+theorem Dirac {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V)
     (hvgeq3 : Fintype.card V ≥ 3) [∀ v : V, Fintype (G.neighborSet v)]
     (hdeg : ∀ v : V, SimpleGraph.degree G v ≥ Fintype.card V / 2)
     : SimpleGraph.IsHamiltonian G := by
 
-    have hExistsMaxPath : ∃ P : Path' G, MaximumPath P := by
+    have hExistsMaxPath : ∃ P : Sigma (SomePath G), MaximumPath P := by
         have hGnonempty : G.edgeSet.Nonempty := by
             sorry
         have hvgeq2 : Fintype.card V ≥ 2 := by
             sorry
-        exact existsMaximumPath G hvgeg2 hGnonempty
+        exact exists_max_path G hvgeg2 hGnonempty
 
     rcases hExistsMaxPath with ⟨P, hPIsMaxPath⟩
 
-    let P_vlist := P.2.2.val.support
+    -- let P_vlist := P.2.2.val.support
 
     sorry
     -- might need to 'unfold' these to see the actual property they represent
