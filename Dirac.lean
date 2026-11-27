@@ -36,7 +36,7 @@ theorem pigeonhole_variant [Fintype A] [Fintype B] [DecidableEq A] [DecidableEq 
 
 theorem Dirac {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V)
     (hvgeq3 : Fintype.card V ≥ 3) [∀ v : V, Fintype (G.neighborSet v)]
-    (hdeg : ∀ v : V, SimpleGraph.degree G v ≥ Fintype.card V / 2)
+    (hdeg : ∀ v : V, 2 * SimpleGraph.degree G v ≥ Fintype.card V)
     : SimpleGraph.IsHamiltonian G := by
 
     -- TODO: show that G has edges.
