@@ -3,12 +3,21 @@ import Mathlib.Combinatorics.SimpleGraph.Basic
 import Mathlib.Combinatorics.Pigeonhole
 import Mathlib.Combinatorics.SimpleGraph.Hamiltonian
 
-def MaximalPathBetween {V : Type} [Fintype V] [DecidableEq V] (a b : V) (G : SimpleGraph V) (P : G.Path a b) : Prop :=
-    ∀ Q : G.Path a b, P.val.length ≥ Q.val.length
+def Path' {V : Type} [Fintype V] [DecidableEq V] (G: SimpleGraph V) :=
+    Σ (u v : V), G.Path u v
 
-def MaximalPath {V : Type} [Fintype V] [DecidableEq V] {a b : V} {G : SimpleGraph V} (P : G.Path a b): Prop :=
-    ∀ u v : V, ∀ Q : G.Path u v, P.val.length ≥ Q.val.length
+def path'_length {V : Type} [Fintype V] [DecidableEq V] {G: SimpleGraph V} (P : Path' G)
+    := P.2.2.val.length
 
+-- def MaximumPathBetween {V : Type} [Fintype V] [DecidableEq V] (a b : V) (G : SimpleGraph V) (P : G.Path a b) : Prop :=
+--     ∀ Q : G.Path a b, P.val.length ≥ Q.val.length
+
+def MaximumPath {V : Type} [Fintype V] [DecidableEq V] {G : SimpleGraph V} (P : Path' G) : Prop :=
+    ∀ Q : Path' G, path'_length P ≥ path'_length Q
+
+theorem existsMaximumPath {V : Type} [Fintype V] [DecidableEq V] {a b : V} (G : SimpleGraph V)
+    (hvgeq2 : Fintype.card V ≥ 2) (hGnonempt : G.edgeSet.Nonempty) : ∃ P : Path' G, MaximumPath P := by
+    sorry
 
 variable {V : Type}
 variable (Red Green : Set V)
@@ -16,14 +25,18 @@ variable (Red Green : Set V)
 theorem Dirac {Red Green : Set V} [Fintype V] [DecidableEq V] (G : SimpleGraph V) (hvgeq3 : Fintype.card V ≥ 3)
 [∀ v : V, Fintype (G.neighborSet v)] (hdeg : ∀ v : V, SimpleGraph.degree G v ≥ Fintype.card V / 2)
 : SimpleGraph.IsHamiltonian G := by
-
-    -- might need to 'unfold' these to see the actual property they represent
-    let Red : Set V := sorry
-    let Green : Set V := sorry
-    have existsredandgreenvi : ∃ v : V, v ∈ Red ∧ v ∈ Green := by
+    have hmaxpath : ∃ P : Path' G, MaximumPath P := by
         sorry
 
+    rcases hmaxpath with ⟨P, PmaxPath⟩
     sorry
+    -- might need to 'unfold' these to see the actual property they represent
+    -- let Red : Set V := sorry
+    -- let Green : Set V := sorry
+    -- have existsredandgreenvi : ∃ v : V, v ∈ Red ∧ v ∈ Green := by
+    --     sorry
+
+    -- sorry
 
   --Let P be a maxium path in G, v1 ... vk
   -- G.Path u v
