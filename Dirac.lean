@@ -9,7 +9,7 @@ def MaximalPathBetween {V : Type} [Fintype V] [DecidableEq V] (a b : V) (G : Sim
 def IsMaximalPath {V : Type} [Fintype V] [DecidableEq V] {a b : V} {G : SimpleGraph V} (P : G.Path a b): Prop :=
     ∀ u v : V, ∀ Q : G.Path u v, P.val.length ≥ Q.val.length
 
-lemma PathLengthIsAtMostCardV {V : Type} [Fintype V] {a b : V} {G : SimpleGraph V}:
+lemma PathLengthIsAtMostCardV {V : Type} [Fintype V] {a b : V} {G : SimpleGraph V} (hvgeq3 : Fintype.card V ≥ 3):
     ∀ P : G.Path a b, P.val.length ≤ Fintype.card V := by
     intro P
     sorry
@@ -21,8 +21,11 @@ lemma FiniteGraphHasMaximalPath {V : Type} [Fintype V] [DecidableEq V] {G : Simp
 theorem Dirac {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V) (hvgeq3 : Fintype.card V ≥ 3)
 [∀ v : V, Fintype (G.neighborSet v)] (hdeg : ∀ v : V, SimpleGraph.degree G v ≥ Fintype.card V / 2) {a b : V}
 : SimpleGraph.IsHamiltonian G := by
+    let P : G.Path a b := sorry
+    let GreenSet := {v : V // G.Adj v a}
+    -- let RedSet := {v : V // v ∈ P.val.support ∧ v ≠ P.val.support.getLast ∧ G.Adj P.val.support[P.val.support.findIdx v + 1]] a}
     sorry
-  --Let P be a maxium path in G, v1 ... vk
+  --Let P be a maximum path in G, v1 ... vk
   -- G.Path u v
   -- have k <= n
   -- All neighbours of V1 and vk are in teh path , contra
