@@ -3,23 +3,26 @@ import Mathlib.Combinatorics.SimpleGraph.Basic
 import Mathlib.Combinatorics.Pigeonhole
 import Mathlib.Combinatorics.SimpleGraph.Hamiltonian
 
+-- Notion of a path with arbitrary endpoints. Called using Sigma (SomePath G) - 'Sigma' means we
+-- don't care about what the endpoints are. In order to access 'Path' attribute of P, must write P.snd
+-- P.fst will give pair (u, v) of endpoints.
 def SomePath {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V) (endpoints : V × V) : Type :=
     G.Path endpoints.fst endpoints.snd
-
-def Path' {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V) : Type :=
-    Σ u v : V, G.Path u v
 
 def MaximumPath {V : Type} [Fintype V] [DecidableEq V] {G : SimpleGraph V} (P : Sigma (SomePath G)) : Prop :=
     ∀ Q : Sigma (SomePath G), P.snd.val.length ≥ Q.snd.val.length
 
+-- TODO: prove that if G is a graph with edges then G has a maximum path.
 theorem exists_max_path {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V)
-    (hvgeq2 : Fintype.card V ≥ 2) (hGnonempty : G.edgeSet.Nonempty)
+    (hGnonempty : G.edgeSet.Nonempty)
     : ∃ P : Sigma (SomePath G), MaximumPath P := by
     sorry
 
+-- TODO: prove that for any graph with a path, the length of this path is at most |V| - 1
+-- (length of a walk is defined as no. of edges along it)
 theorem pathLengthLeV {V : Type} [Fintype V] [DecidableEq V] {G : SimpleGraph V}
     (P : Sigma (SomePath G))
-    : P.snd.val.length ≤ Fintype.card V := by
+    : P.snd.val.length ≤ Fintype.card V - 1 := by
         sorry
 
 -- theorem pigeonhole_variant [Fintype A] [Fintype B] [DecidableEq A] [DecidableEq B] (f : A → Finset B)
@@ -35,13 +38,13 @@ theorem Dirac {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V)
     (hdeg : ∀ v : V, SimpleGraph.degree G v ≥ Fintype.card V / 2)
     : SimpleGraph.IsHamiltonian G := by
 
+    -- TODO: show that G has edges.
     have hExistsMaxPath : ∃ P : Sigma (SomePath G), MaximumPath P := by
         have hGnonempty : G.edgeSet.Nonempty := by
             sorry
-        have hvgeq2 : Fintype.card V ≥ 2 := by
-            sorry
-        exact exists_max_path G hvgeg2 hGnonempty
+        exact exists_max_path G hGnonempty
 
+    -- rcases recursively unfolds 'there exists' statement in hypothesis to give a maximum path P.
     rcases hExistsMaxPath with ⟨P, hPIsMaxPath⟩
 
     -- let P_vlist := P.2.2.val.support
