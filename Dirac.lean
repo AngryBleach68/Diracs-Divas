@@ -21,6 +21,11 @@ theorem existsMaximumPath {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGrap
 
     sorry
 
+theorem PathLengthLeV {V : Type} [Fintype V] [DecidableEq V] {G : SimpleGraph V}
+    (P : Path' G)
+    : path'_length P ≤ Fintype.card V := by
+        sorry
+
 -- variable {V : Type}
 -- variable (Red Green : Set V)
 
@@ -37,6 +42,8 @@ theorem Dirac {Red Green : Set V} [Fintype V] [DecidableEq V] (G : SimpleGraph V
         exact existsMaximumPath G hvgeg2 hGnonempty
 
     rcases hExistsMaxPath with ⟨P, hPIsMaxPath⟩
+
+    let P_vlist := P.2.2.val.support
 
     sorry
     -- might need to 'unfold' these to see the actual property they represent
