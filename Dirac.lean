@@ -3,10 +3,10 @@ import Mathlib.Combinatorics.SimpleGraph.Basic
 import Mathlib.Combinatorics.Pigeonhole
 import Mathlib.Combinatorics.SimpleGraph.Hamiltonian
 
-def Path' {V : Type} [Fintype V] [DecidableEq V] (G: SimpleGraph V) :=
+def Path' {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V) :=
     Σ (u v : V), G.Path u v
 
-def path'_length {V : Type} [Fintype V] [DecidableEq V] {G: SimpleGraph V} (P : Path' G)
+def path'_length {V : Type} [Fintype V] [DecidableEq V] {G : SimpleGraph V} (P : Path' G)
     := P.2.2.val.length
 
 -- def MaximumPathBetween {V : Type} [Fintype V] [DecidableEq V] (a b : V) (G : SimpleGraph V) (P : G.Path a b) : Prop :=
@@ -15,20 +15,29 @@ def path'_length {V : Type} [Fintype V] [DecidableEq V] {G: SimpleGraph V} (P : 
 def MaximumPath {V : Type} [Fintype V] [DecidableEq V] {G : SimpleGraph V} (P : Path' G) : Prop :=
     ∀ Q : Path' G, path'_length P ≥ path'_length Q
 
-theorem existsMaximumPath {V : Type} [Fintype V] [DecidableEq V] {a b : V} (G : SimpleGraph V)
-    (hvgeq2 : Fintype.card V ≥ 2) (hGnonempt : G.edgeSet.Nonempty) : ∃ P : Path' G, MaximumPath P := by
+theorem existsMaximumPath {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V)
+    (hvgeq2 : Fintype.card V ≥ 2) (hGnonempty : G.edgeSet.Nonempty)
+    : ∃ P : Path' G, MaximumPath P := by
+
     sorry
 
-variable {V : Type}
-variable (Red Green : Set V)
+-- variable {V : Type}
+-- variable (Red Green : Set V)
 
-theorem Dirac {Red Green : Set V} [Fintype V] [DecidableEq V] (G : SimpleGraph V) (hvgeq3 : Fintype.card V ≥ 3)
-[∀ v : V, Fintype (G.neighborSet v)] (hdeg : ∀ v : V, SimpleGraph.degree G v ≥ Fintype.card V / 2)
-: SimpleGraph.IsHamiltonian G := by
-    have hmaxpath : ∃ P : Path' G, MaximumPath P := by
-        sorry
+theorem Dirac {Red Green : Set V} [Fintype V] [DecidableEq V] (G : SimpleGraph V)
+    (hvgeq3 : Fintype.card V ≥ 3) [∀ v : V, Fintype (G.neighborSet v)]
+    (hdeg : ∀ v : V, SimpleGraph.degree G v ≥ Fintype.card V / 2)
+    : SimpleGraph.IsHamiltonian G := by
 
-    rcases hmaxpath with ⟨P, PmaxPath⟩
+    have hExistsMaxPath : ∃ P : Path' G, MaximumPath P := by
+        have hGnonempty : G.edgeSet.Nonempty := by
+            sorry
+        have hvgeq2 : Fintype.card V ≥ 2 := by
+            sorry
+        exact existsMaximumPath G hvgeg2 hGnonempty
+
+    rcases hExistsMaxPath with ⟨P, hPIsMaxPath⟩
+
     sorry
     -- might need to 'unfold' these to see the actual property they represent
     -- let Red : Set V := sorry
