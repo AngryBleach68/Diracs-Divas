@@ -42,15 +42,31 @@ theorem Dirac {V : Type} [Fintype V] [DecidableEq V] (G : SimpleGraph V)
     (hdeg : ∀ v : V, 2 * SimpleGraph.degree G v ≥ Fintype.card V)
     : SimpleGraph.IsHamiltonian G := by
 
-    -- TODO: show that G has edges.
     have hExistsMaxPath : ∃ P : Sigma (SomePath G), MaximumPath P := by
+
         have hGnonempty : G.edgeSet.Nonempty := by
-            -- 4 * |E| >= |V|^2 by SimpleGraph.sum_degrees_eq_twice_card_edges
-            -- |V|^2 >= 6 by hvgeq3
-            -- hence |E| >= 3/2
-            -- hence |E| >= 1 as natural number
-            -- hence edgeSet is non empty
-            sorry
+          -- Prove vertex set is nonempty by 'omega' tactic (tactic for inequalities over integers)
+          have hvNonempty : Nonempty V := by
+            apply Fintype.card_pos_iff.mp
+            omega
+
+          -- As V is nonempty can pick a vertex v
+          rcases hvNonempty with ⟨v⟩
+
+          -- Show v has positive degree via omega
+          have hdeg_pos : 0 < G.degree v := by
+            have := hdeg v
+            omega
+
+          -- obtain is concat of 'have' & 'rcases' tactic (prove statement, then unfold proof)
+          -- Proof of neighborhood of v being non empty gives a vx u in v's neighborhood.
+          obtain ⟨u, hu⟩ := Finset.card_pos.mp hdeg_pos
+
+          -- <=> Equiv. to u & v being adjacent
+          rw [SimpleGraph.mem_neighborFinset] at hu
+
+          -- Provide u, v & proof of adjacency - shows edgeset is nonempty.
+          exact ⟨s(v, u), hu⟩
 
         exact exists_max_path G hGnonempty
 
